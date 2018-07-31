@@ -4,7 +4,9 @@ import cyberlife.model.LoopList;
 import cyberlife.model.life.Animal;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class World {
 
@@ -13,6 +15,7 @@ public class World {
 
     private ArrayList<ArrayList<Cell>> map = new ArrayList<ArrayList<Cell>>();
     private LoopList<Animal> population = new LoopList<>();
+    private Random random = new Random();
 
 
     public World(int x, int y){
@@ -27,8 +30,6 @@ public class World {
             map.add(row);
         }
 
-        Random random = new Random();
-
         Cell target = map.get(random.nextInt(xSize)).get(random.nextInt(ySize));
         Animal first = new Animal(16, target, this);
         target.setAnimal(first);
@@ -37,13 +38,50 @@ public class World {
     }
 
 
-    public World tick(){
-
-        for (Animal animal: population){
-            if (animal.getStatus() == Animal.ALIVE) animal.step();
+    public World tick(int tick){
+        int n = population.size();
+        int k = 0;
+        for (int i = 0; i < n ; i++){
+            Animal animal = population.getNext();
+            if (animal.getStatus() == Animal.ALIVE) {
+                animal.step();
+                k++;
+            }
         }
+        if (tick%5 == 0) grassGrow();
+        if (tick%500 == 0) godHand();
+        if (k>0) return this;
+        else return null;
+    }
 
-        return this;
+    private void grassGrow(){
+        for (ArrayList<Cell> row : map){
+            for (Cell cell : row){
+                cell.increaseGrass();
+            }
+        }
+    }
+
+    private Set<Integer> random5(){
+        Set<Integer> generated = new LinkedHashSet<Integer>();
+        while (generated.size() < 5)
+        {
+            Integer next = random.nextInt(16);
+            // As we're adding to a set, this will automatically do a containment check
+            generated.add(next);
+        }
+        return generated;
+    }
+
+    private void godHand(){
+
+        for (Animal animal : population){
+            if (animal.getStatus() == Animal.ALIVE) {
+                for (Integer index : random5()){
+                    animal.mutation(index, random.nextInt(16), animal);
+                }
+            }
+        }
     }
 
     public int getxSize() {
@@ -67,13 +105,20 @@ public class World {
     }
 
     Cell getCell(int x, int y){
-        if (x<0 || x > xSize){return null;}
+        if (x<0 || x >= xSize){return null;}
         if (y<=0){y = y+ySize;}
         if (y>=ySize){y = y-ySize;}
         return map.get(x).get(y);
     }
 
-    public void addToPopulation(Animal animal, Animal host){
-        population.add(population.indexOf(host)-1, animal);
+    public void addToPopulation(Animal animal){
+        population.add(animal);
+    }
+    public void kickFromPopulation(Animal animal){
+        population.remove(animal);
+    }
+
+    public LoopList<Animal> getPopulation() {
+        return population;
     }
 }

@@ -9,7 +9,7 @@ public class Cell {
 
     private int grass;
     private Animal animal = null;
-    private int maxGrass = 5;
+    private int maxGrass = 9;
     private int x;
     private int y;
 
@@ -29,14 +29,22 @@ public class Cell {
             this.grass = 0;
         }
         if (prob>5 && prob<=15){
-            this.grass = 2;
+            this.grass = 8;
         }
-        if (prob>15 && prob<=90){
-            this.grass = 3;
+        if (prob>15 && prob<=75){
+            this.grass = 6;
         }
-        if (prob>0 && prob<=5){
+        if (prob>75 && prob<=100){
             this.grass = 4;
         }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public Animal getAnimal() {
@@ -66,6 +74,7 @@ public class Cell {
                 neibours.add(world.getCell(this.x+i, this.y+j));
             }
         }
+        neibours.remove(this);
         return neibours;
     }
 

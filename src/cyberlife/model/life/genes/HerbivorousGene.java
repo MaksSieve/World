@@ -2,17 +2,18 @@ package cyberlife.model.life.genes;
 
 import cyberlife.model.life.Animal;
 
-public class HerbivourosGene extends Gene{
+public class HerbivorousGene extends Gene{
 
 
-    public HerbivourosGene(Animal host) {
+    public HerbivorousGene(Animal host) {
         super(host);
     }
 
     @Override
     public void action() {
-        int food = (this.host.getCell().getGrassAmount() > 0)?30:0;
+        int food = (this.host.getCell().getGrassAmount() > 0)?50:0;
         host.increaseEnergy(food);
         host.getCell().decreaseGrass();
+        host.increaseGreen(10);
     }
 }
