@@ -1,39 +1,44 @@
 package cyberlife;
 
+import cyberlife.View.TextView;
+import cyberlife.View.gui.GUIVIew;
+import cyberlife.model.world.World;
+
 public class Main {
 
     private static int TICKS = 1000000;
-    private static int world_X = 30;
-    private static int world_Y = 30;
+    private static int world_X = 10;
+    private static int world_Y = 10;
 
 
     public static void main(String[] args) throws InterruptedException {
 
+        World BraveNewWorld = new World(world_X, world_Y);
+        System.out.println("Tick 0");
+        TextView.printWorld(BraveNewWorld);
+        GUIVIew window = new GUIVIew(world_X, world_Y, BraveNewWorld);
 
+        int i = 1;
+        while(true){
+            if(BraveNewWorld.tick(i) != null) {
+                if (i%5==0){
+                    window.update(BraveNewWorld);
+                    Thread.sleep(10);
+                }
+                if (i%25==0){
+                    System.out.println("Tick " + String.valueOf(i));
+                    TextView.printWorld(BraveNewWorld);
+                }
 
-
-
-
-//        World BraveNewWorld = new World(world_X, world_Y);
-//        System.out.println("Tick 0");
-//        TextView.printWorld(BraveNewWorld);
-//        int i = 1;
-//        while(true){
-//            if(BraveNewWorld.tick(i) != null) {
-//                if (i%25==0){
-//                    System.out.println("Tick " + String.valueOf(i));
-//                    TextView.printWorld(BraveNewWorld);
-//                    Thread.sleep(5000);
-//                }
-//
-//            }else{
-//                System.out.println("Tick " + String.valueOf(i));
-//                TextView.printWorld(BraveNewWorld);
-//                System.out.println("POPULATION DEAD...");
-//                break;
-//            }
-//            i++;
-//        }
+            }else{
+                System.out.println("Tick " + String.valueOf(i));
+                window.update(BraveNewWorld);
+                TextView.printWorld(BraveNewWorld);
+                System.out.println("POPULATION DEAD...");
+                break;
+            }
+            i++;
+        }
 
     }
 }
