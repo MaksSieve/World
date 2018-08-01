@@ -17,6 +17,7 @@ public class TextView {
 
                 Animal animal = world.getMap().get(i).get(j).getAnimal();
                 String a = "0";
+
                 if (animal != null) {if (animal.getStatus() != 0) a="1"; else a = "-";}
                 int grassAmount = world.getMap().get(i).get(j).getGrassAmount();
                 String view = a+String.valueOf(grassAmount) + "   ";
@@ -38,6 +39,8 @@ public class TextView {
                     String g = (animal.green == max_type)?"g":"";
                     String b = (animal.blue == max_type)?"b":"";
                     sa = sa + "ID" + animal.hashCode() + ", " +
+                            "i: " + i + " " +
+                            "j: " + j + " " +
                             "X: " + String.valueOf(animal.getCell().getX()) + " " +
                             "Y: " + String.valueOf(animal.getCell().getY()) + ", " +
                             "Status: " + String.valueOf(animal.getStatus()) +  ", " +

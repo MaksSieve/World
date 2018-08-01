@@ -8,6 +8,8 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
 
+import static cyberlife.model.life.Animal.MAX_DEAD_COUNT;
+
 public class World {
 
     private int xSize;
@@ -37,7 +39,6 @@ public class World {
 
     }
 
-
     public World tick(int tick){
         int n = population.size();
         int k = 0;
@@ -46,9 +47,20 @@ public class World {
             if (animal.getStatus() == Animal.ALIVE) {
                 animal.step();
                 k++;
+            }else{
+                if (animal.dead_count < MAX_DEAD_COUNT){
+                    animal.dead_count++;
+                }else{
+                    population.remove(animal);
+                    population.decreasePointer();
+                    animal.getCell().increaseMinerals(1);
+                    animal.getCell().setAnimal(null);
+                    animal = null;
+                }
             }
         }
         if (tick%5 == 0) grassGrow();
+        if (tick%100 == 0) grassUpdate();
         if (tick%500 == 0) godHand();
         if (k>0) return this;
         else return null;
@@ -57,7 +69,20 @@ public class World {
     private void grassGrow(){
         for (ArrayList<Cell> row : map){
             for (Cell cell : row){
-                cell.increaseGrass();
+                int minerals = 0;
+                for (Cell neib : cell.getNeibours()){
+                    if (neib != null)
+                        minerals += (int)Math.round(neib.getMinerals()*0.0005);
+                }
+                cell.increaseGrass(1 + (int)Math.round(minerals*0.0001));
+            }
+        }
+    }
+
+    private void grassUpdate(){
+        for (ArrayList<Cell> row : map){
+            for (Cell cell : row){
+                cell.setMaxGrass(9 + (int)Math.round(cell.getMinerals()*0.000001));
             }
         }
     }
@@ -113,9 +138,6 @@ public class World {
 
     public void addToPopulation(Animal animal){
         population.add(animal);
-    }
-    public void kickFromPopulation(Animal animal){
-        population.remove(animal);
     }
 
     public LoopList<Animal> getPopulation() {

@@ -12,21 +12,28 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
-        World BraveNewWorld = new World(20,40);
+        int world_X = 5;
+        int world_Y = 5;
+
+        World BraveNewWorld = new World(world_X, world_Y);
         System.out.println("Tick 0");
         TextView.printWorld(BraveNewWorld);
-        for (int i = 1; i < TICKS; i++){
+        int i = 1;
+        while(true){
             if(BraveNewWorld.tick(i) != null) {
-                if (i%100==0){
+                if (i%1==0){
                     System.out.println("Tick " + String.valueOf(i));
                     TextView.printWorld(BraveNewWorld);
                     Thread.sleep(5000);
                 }
 
             }else{
+                System.out.println("Tick " + String.valueOf(i));
+                TextView.printWorld(BraveNewWorld);
                 System.out.println("POPULATION DEAD...");
                 break;
             }
+            i++;
         }
 
     }

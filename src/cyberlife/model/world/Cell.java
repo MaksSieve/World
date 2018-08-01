@@ -8,12 +8,13 @@ import java.util.Random;
 public class Cell {
 
     private int grass;
+    private int minerals;
     private Animal animal = null;
     private int maxGrass = 9;
     private int x;
     private int y;
 
-    World world;
+    private World world;
 
     Cell(int x, int y, World world){
 
@@ -55,12 +56,16 @@ public class Cell {
         this.animal = animal;
     }
 
-    public void increaseGrass() {
-        if (this.grass<maxGrass) {this.grass++;}
+    public void increaseGrass(int n) {
+        if (this.grass<maxGrass) {this.grass+= n;}
     }
 
     public void decreaseGrass() {
         if (this.grass>0) {this.grass--;}
+    }
+
+    public void increaseMinerals(int n) {
+        {this.minerals += n;}
     }
 
     public int getGrassAmount() {
@@ -82,7 +87,11 @@ public class Cell {
         return  getNeibours().get(direction);
     }
 
-    public int getGrass() {
-        return grass;
+    public int getMinerals() {
+        return minerals;
+    }
+
+    public void setMaxGrass(int maxGrass) {
+        this.maxGrass = maxGrass;
     }
 }

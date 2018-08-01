@@ -18,6 +18,7 @@ public class Animal {
     public static int CORPSE = 0;
     private static int UNIQUE_ID = 0;
     private static int MAX_COLOR = 100;
+    public static int MAX_DEAD_COUNT = 20;
     private int uid = ++UNIQUE_ID;
 
     private Random random = new Random();
@@ -33,8 +34,8 @@ public class Animal {
     public int green = 0;
     public int red = 0;
     public int blue = 0;
-
     public int k = 0;
+    public int dead_count = 0;
 
     public Animal(int genomeSize, Cell cell, World world){
         genome = new LoopList<>();
@@ -156,7 +157,6 @@ public class Animal {
         if (green-diff>=0) green -= diff; else green = 0;
         if (red-diff>=0) red -= diff; else red = 0;
     }
-
 
     public Cell getCell() {
         return cell;

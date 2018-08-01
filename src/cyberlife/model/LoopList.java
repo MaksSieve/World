@@ -16,6 +16,10 @@ public class LoopList<T> extends ArrayList<T> {
         if (pointer < this.size()-1)pointer++; else pointer = 0;
     }
 
+    public void decreasePointer(){
+        if (pointer > 1)pointer--; else pointer = this.size()-1;
+    }
+
     public void increasePointer(int n){
         if (pointer + n >= this.size())
             pointer = pointer+n-this.size();
