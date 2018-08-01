@@ -1,7 +1,6 @@
 package cyberlife.model.life.genes;
 
 import cyberlife.model.life.Animal;
-import cyberlife.model.life.genes.GeneTranslator;
 
 public class Gene{
 
@@ -15,7 +14,7 @@ public class Gene{
     public void action(){
         host.getGenome().increasePointer(GeneTranslator.geneToInt(this));
         try {
-            if (host.k < 5) {
+            if (host.k < 32) {
                 host.k++;
                 host.getGenome().getNext().action();
             }

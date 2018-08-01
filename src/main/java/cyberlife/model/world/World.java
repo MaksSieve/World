@@ -33,7 +33,7 @@ public class World {
         }
 
         Cell target = map.get(random.nextInt(xSize)).get(random.nextInt(ySize));
-        Animal first = new Animal(16, target, this);
+        Animal first = new Animal(64, target, this);
         target.setAnimal(first);
         population.add(first);
 
@@ -59,7 +59,7 @@ public class World {
                 }
             }
         }
-        if (tick%5 == 0) grassGrow();
+        if (tick%25 == 0) grassGrow();
         if (tick%100 == 0) grassUpdate();
         if (tick%500 == 0) godHand();
         if (k>0) return this;
@@ -87,11 +87,11 @@ public class World {
         }
     }
 
-    private Set<Integer> random5(){
+    private Set<Integer> randomX(int x){
         Set<Integer> generated = new LinkedHashSet<Integer>();
-        while (generated.size() < 5)
+        while (generated.size() < x)
         {
-            Integer next = random.nextInt(16);
+            Integer next = random.nextInt(64);
             // As we're adding to a set, this will automatically do a containment check
             generated.add(next);
         }
@@ -99,11 +99,11 @@ public class World {
     }
 
     private void godHand(){
-
+        System.out.println("HAAAAALELLUJAH!");
         for (Animal animal : population){
             if (animal.getStatus() == Animal.ALIVE) {
-                for (Integer index : random5()){
-                    animal.mutation(index, random.nextInt(16), animal);
+                for (Integer index : randomX(32)){
+                    animal.mutation(index, random.nextInt(64), animal);
                 }
             }
         }

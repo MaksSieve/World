@@ -8,6 +8,7 @@ import cyberlife.model.world.World;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static cyberlife.model.life.genes.GeneTranslator.intToGene;
@@ -20,16 +21,16 @@ public class Animal {
     private static int MAX_COLOR = 100;
     public static int MAX_DEAD_COUNT = 20;
     private int uid = ++UNIQUE_ID;
+    private int maxEnergy = 1000;
 
     private Random random = new Random();
     private LoopList<Gene> genome;
     private int energy;
-    private int maxEnergy = 100;
     private int direction;
     private Cell cell;
     private World world;
     private int status;
-
+    private ArrayList<Animal> neighbours = null;
 
     public int green = 0;
     public int red = 0;
@@ -42,9 +43,9 @@ public class Animal {
         for (int i = 0; i < genomeSize; i++){
             genome.add(new HerbivorousGene(this));
         }
-        this.energy = 50;
+        this.energy = 500;
         this.direction = random.nextInt(8);
-        this.cell = cell;
+        this.setCell(cell);
         this.world = world;
         this.status = ALIVE;
     }
@@ -61,10 +62,6 @@ public class Animal {
 
     public int hashCode() {
         return uid;
-    }
-
-    public Animal clone(){
-        return new Animal(genome,energy,maxEnergy,direction,cell,world,status);
     }
 
     private LoopList<Gene> genomeClone(Animal recipient){
@@ -88,25 +85,26 @@ public class Animal {
         Animal clone = new Animal(genome.size(), target, world);
         clone.setGenome(genomeClone(clone));
         clone.setDirection(random.nextInt(8));
+        clone.setColor(red, green, blue);
         target.setAnimal(clone);
         world.addToPopulation(clone);
     }
 
     public void step(){
         this.k = 0;
+        setNeighbours(updateNeighbours());
         genome.getNext().action();
-
         if (energy >= maxEnergy){
             Cell target = cell.getNeibour(random.nextInt(8));
             if (target != null) {
                 if (target.getAnimal() != null) {
                     if (target.getAnimal().getStatus() != ALIVE) {
                         reproduction(target);
-                        this.decreaseEnergy(80);
+                        this.decreaseEnergy(500);
                     }else dead();
                 }else{
                     reproduction(target);
-                    this.decreaseEnergy(80);
+                    this.decreaseEnergy(500);
                 }
             }else dead();
         }
@@ -115,11 +113,11 @@ public class Animal {
             dead();
         }
 
-        if (random.nextInt(4)==0){
-            mutation(random.nextInt(genome.size()), random.nextInt(16), this);
+        if (random.nextInt(3)==0){
+            mutation(random.nextInt(genome.size()), random.nextInt(64), this);
         }
 
-        this.decreaseEnergy(10);
+        this.decreaseEnergy(50 + red*5 + blue*3);
 
     }
 
@@ -188,5 +186,50 @@ public class Animal {
 
     private void setGenome(LoopList<Gene> genome) {
         this.genome = genome;
+    }
+
+    private void setColor(int r, int g, int b){
+        this.red = r;
+        this.green = g;
+        this.blue = b;
+    }
+
+    public void setNeighbours(ArrayList<Animal> neighbours) {
+        this.neighbours = neighbours;
+    }
+
+    public ArrayList<Animal> getNeighbours() {
+        return neighbours;
+    }
+
+    public boolean isGenomeEquals(Animal other){
+        int k = 0;
+        LoopList<Gene> otherGenome =  other.getGenome();
+        for (int i = 0; i < genome.size(); i++){
+            if (genome.get(i).getClass() != otherGenome.get(i).getClass()){
+                k++;
+            }
+        }
+        return k < 2;
+    }
+
+    private ArrayList<Animal> updateNeighbours(){
+        ArrayList<Cell> neighbCells = this.cell.getNeibours();
+        ArrayList<Animal> neighbours = new ArrayList<>();
+        for (Cell cell:neighbCells) {
+            if (cell != null) {
+                Animal potentialNeighbour = cell.getAnimal();
+                if (potentialNeighbour != null) {
+                    if (isGenomeEquals(potentialNeighbour)) {
+                        neighbours.add(potentialNeighbour);
+                    }
+                }
+            }
+        }
+        return neighbours;
+    }
+
+    public int getUid() {
+        return uid;
     }
 }

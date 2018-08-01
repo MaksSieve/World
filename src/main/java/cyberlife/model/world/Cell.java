@@ -7,10 +7,12 @@ import java.util.Random;
 
 public class Cell {
 
+
+    private int MAX_GRASS = 20;
     private int grass;
     private int minerals;
     private Animal animal = null;
-    private int maxGrass = 9;
+
     private int x;
     private int y;
 
@@ -57,7 +59,7 @@ public class Cell {
     }
 
     public void increaseGrass(int n) {
-        if (this.grass<maxGrass) {this.grass+= n;}
+        if (this.grass<MAX_GRASS) {this.grass+= n;}
     }
 
     public void decreaseGrass() {
@@ -76,15 +78,19 @@ public class Cell {
         ArrayList<Cell> neibours = new ArrayList<Cell>();
         for (int i = -1; i < 2; i++){
             for (int j = -1; j < 2; j++){
-                neibours.add(world.getCell(this.x+i, this.y+j));
+                Cell potentialNeighbour = world.getCell(this.x+i, this.y+j);
+                neibours.add(potentialNeighbour);
             }
         }
-        neibours.remove(this);
         return neibours;
     }
 
     public Cell getNeibour(int direction){
-        return  getNeibours().get(direction);
+        try {
+            return getNeibours().get(direction);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public int getMinerals() {
@@ -92,6 +98,6 @@ public class Cell {
     }
 
     public void setMaxGrass(int maxGrass) {
-        this.maxGrass = maxGrass;
+        this.MAX_GRASS = maxGrass;
     }
 }

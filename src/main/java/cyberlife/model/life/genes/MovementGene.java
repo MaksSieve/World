@@ -15,6 +15,7 @@ public class MovementGene extends Gene{
         if (target != null){
             host.getCell().setAnimal(null);
             target.setAnimal(host);
+            host.decreaseEnergy(100);
         }
     }
 }

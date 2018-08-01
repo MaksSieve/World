@@ -12,6 +12,9 @@ public class TurnGene extends Gene{
 
     @Override
     public void action() {
+
         host.setDirection(geneToInt(host.getGenome().getNext())%8);
+        host.k++;
+        host.getGenome().getNext().action();
     }
 }
