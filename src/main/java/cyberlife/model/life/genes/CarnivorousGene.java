@@ -16,9 +16,9 @@ public class CarnivorousGene extends Gene {
         if (target != null){
             if (target.getAnimal() != null){
                 if (target.getAnimal().getStatus() == ALIVE) {
-                    target.getAnimal().decreaseEnergy(80);
-                    host.increaseEnergy(80);
-                    host.increaseRed(10);
+                    target.getAnimal().decreaseEnergy(800);
+                    host.increaseEnergy(800);
+                    host.increaseRed(100);
                 }
             }
         }

@@ -11,9 +11,9 @@ public class HerbivorousGene extends Gene{
 
     @Override
     public void action() {
-        int food = (this.host.getCell().getGrassAmount() > 0)?300:0;
+        int food = (this.host.getCell().getGrassAmount() > 0)?50+ (int)Math.round(host.getCell().getGrassAmount()*0.5):0;
         host.increaseEnergy(food);
-        host.getCell().decreaseGrass();
-        host.increaseGreen(10);
+        host.getCell().decreaseGrass(1);
+        host.increaseGreen(30);
     }
 }

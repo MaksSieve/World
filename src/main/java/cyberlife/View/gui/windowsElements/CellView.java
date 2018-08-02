@@ -20,17 +20,17 @@ public class CellView extends JLabel {
         update(model);
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
         this.add(this.animal);
-        this.revalidate();
-        this.repaint();
-        setVisible(true);
+//        this.revalidate();
+//        this.repaint();
+        //setVisible(true);
     }
 
 
     public void update(Cell newCell){
-        if (model.getGrassAmount()>0)
-            this.setIcon(greenBack);
-        else
-            this.setIcon(brownBack);
+//        if (model.getGrassAmount()>0)
+//            this.setIcon(greenBack);
+//        else
+//            this.setIcon(brownBack);
         if (newCell.getAnimal() != null)
             animal.update(newCell.getAnimal());
         else

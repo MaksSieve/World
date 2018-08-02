@@ -19,7 +19,7 @@ public class Animal {
     public static int CORPSE = 0;
     private static int UNIQUE_ID = 0;
     private static int MAX_COLOR = 100;
-    public static int MAX_DEAD_COUNT = 20;
+    public static int MAX_DEAD_COUNT = 10;
     private int uid = ++UNIQUE_ID;
     private int maxEnergy = 1000;
 
@@ -113,8 +113,8 @@ public class Animal {
             dead();
         }
 
-        if (random.nextInt(3)==0){
-            mutation(random.nextInt(genome.size()), random.nextInt(64), this);
+        if (random.nextInt(10)==0){
+            mutation(random.nextInt(genome.size()), random.nextInt(12), this);
         }
 
         this.decreaseEnergy(50 + red*5 + blue*3);

@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
 
+import static cyberlife.model.life.Animal.ALIVE;
 import static cyberlife.model.life.Animal.MAX_DEAD_COUNT;
 
 public class World {
@@ -33,7 +34,7 @@ public class World {
         }
 
         Cell target = map.get(random.nextInt(xSize)).get(random.nextInt(ySize));
-        Animal first = new Animal(64, target, this);
+        Animal first = new Animal(16, target, this);
         target.setAnimal(first);
         population.add(first);
 
@@ -53,13 +54,13 @@ public class World {
                 }else{
                     population.remove(animal);
                     population.decreasePointer();
-                    animal.getCell().increaseMinerals(1);
+                    animal.getCell().increaseMinerals(animal.getEnergy());
                     animal.getCell().setAnimal(null);
                     animal = null;
                 }
             }
         }
-        if (tick%25 == 0) grassGrow();
+        if (tick%50== 0) grassGrow();
         if (tick%100 == 0) grassUpdate();
         if (tick%500 == 0) godHand();
         if (k>0) return this;
@@ -72,9 +73,11 @@ public class World {
                 int minerals = 0;
                 for (Cell neib : cell.getNeibours()){
                     if (neib != null)
-                        minerals += (int)Math.round(neib.getMinerals()*0.0005);
+                        minerals += (int)Math.round(neib.getMinerals()*0.05);
                 }
-                if (random.nextInt(100)<40) cell.increaseGrass(1 + (int)Math.round(minerals*0.0001));
+                int r = random.nextInt(100);
+                if (r<10) cell.decreaseGrass(250);
+                else cell.increaseGrass(50 + (int)Math.round(minerals*0.01));
             }
         }
     }
@@ -82,7 +85,7 @@ public class World {
     private void grassUpdate(){
         for (ArrayList<Cell> row : map){
             for (Cell cell : row){
-                cell.setMaxGrass(9 + (int)Math.round(cell.getMinerals()*0.000001));
+                cell.setMaxGrass(250 + (int)Math.round(cell.getMinerals()*0.000001));
             }
         }
     }
@@ -91,7 +94,7 @@ public class World {
         Set<Integer> generated = new LinkedHashSet<Integer>();
         while (generated.size() < x)
         {
-            Integer next = random.nextInt(64);
+            Integer next = random.nextInt(16);
             // As we're adding to a set, this will automatically do a containment check
             generated.add(next);
         }
@@ -102,8 +105,8 @@ public class World {
         System.out.println("HAAAAALELLUJAH!");
         for (Animal animal : population){
             if (animal.getStatus() == Animal.ALIVE) {
-                for (Integer index : randomX(32)){
-                    animal.mutation(index, random.nextInt(64), animal);
+                for (Integer index : randomX(8)){
+                    animal.mutation(index, random.nextInt(16), animal);
                 }
             }
         }
@@ -142,5 +145,27 @@ public class World {
 
     public LoopList<Animal> getPopulation() {
         return population;
+    }
+
+    public Animal getOldest(){
+        Animal oldest = null;
+        int theOldestId = Integer.MAX_VALUE;
+        for (Animal animal : population){
+            if (animal.getStatus() == ALIVE) {
+                if (animal.hashCode() < theOldestId) {
+                    theOldestId = animal.hashCode();
+                    oldest = animal;
+                }
+            }
+        }
+        return oldest;
+    }
+
+    public int getAliveNumber(){
+        int k = 0;
+        for (Animal animal : population){
+            if (animal.getStatus() == ALIVE) k++;
+        }
+        return k;
     }
 }

@@ -8,7 +8,7 @@ import java.util.Random;
 public class Cell {
 
 
-    private int MAX_GRASS = 20;
+    private int MAX_GRASS = 250;
     private int grass;
     private int minerals;
     private Animal animal = null;
@@ -32,13 +32,13 @@ public class Cell {
             this.grass = 0;
         }
         if (prob>5 && prob<=15){
-            this.grass = 8;
+            this.grass = 250;
         }
         if (prob>15 && prob<=75){
-            this.grass = 6;
+            this.grass = 100;
         }
         if (prob>75 && prob<=100){
-            this.grass = 4;
+            this.grass = 25;
         }
     }
 
@@ -59,7 +59,10 @@ public class Cell {
     }
 
     public void increaseGrass(int n) {
-        if (this.grass<MAX_GRASS) {this.grass+= n;}
+        if (this.grass+n<MAX_GRASS) {this.grass+= n;} else this.grass = MAX_GRASS;
+    }
+    public void decreaseGrass(int n) {
+        if (this.grass-n>0) {this.grass-= n;} else this.grass = 0;
     }
 
     public void decreaseGrass() {

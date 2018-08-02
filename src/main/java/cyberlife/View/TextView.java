@@ -14,8 +14,6 @@ public class TextView {
 
         String stat = "";
         int alive = 0;
-        int theOldestId = Integer.MAX_VALUE;
-        Animal theOldest = null;
         int r_number = 0;
         int g_number = 0;
         int b_number = 0;
@@ -25,12 +23,12 @@ public class TextView {
             for (int j = 0; j < world.getySize(); j++){
 
                 Animal animal = world.getMap().get(i).get(j).getAnimal();
-                String a = "0";
-
-                if (animal != null) {if (animal.getStatus() != 0) a="1"; else a = "-";}
-                int grassAmount = world.getMap().get(i).get(j).getGrassAmount();
-                String view = a+"|"+((grassAmount>9)?String.valueOf(grassAmount):"0"+String.valueOf(grassAmount)) + "   ";
-                System.out.print(view);
+//                String a = "0";
+//
+//                if (animal != null) {if (animal.getStatus() != 0) a="1"; else a = "-";}
+//                int grassAmount = world.getMap().get(i).get(j).getGrassAmount();
+//                String view = a+"|"+((grassAmount>9)?String.valueOf(grassAmount):"0"+String.valueOf(grassAmount)) + "   ";
+//                System.out.print(view);
 
                 String sa = "";
 
@@ -60,10 +58,6 @@ public class TextView {
 //                            "Genome: [" + genome+ "];";
 //                    animals.add(sa);
                     alive++;
-                    if (animal.hashCode()<theOldestId){
-                        theOldestId=animal.hashCode();
-                        theOldest = animal;
-                    }
 
                     int max_type = Math.max(animal.blue, Math.max(animal.green, animal.red));
                     if(animal.red == max_type)r_number++;
@@ -72,7 +66,7 @@ public class TextView {
 
                 }
             }
-            System.out.println();
+            //System.out.println();
         }
 //        System.out.println();
 //        for (String sa : animals){
@@ -83,7 +77,7 @@ public class TextView {
 
 
         stat = stat + "Alive Population: " + alive + "\n" +
-            "The oldest alive animal: " + ((theOldest!=null)?animalToString(theOldest):"") + "\n" +
+            "The oldest alive animal: " + ((world.getOldest() != null)?animalToString(world.getOldest()):"") + "\n" +
             "Number of green: " + g_number + " " + "Number of red: " + r_number +  " " + "Number of blue: " + b_number;
 
 
@@ -92,24 +86,27 @@ public class TextView {
 
     public static String animalToString(Animal animal){
         String genome = "";
-        int p = animal.getGenome().getPointer();
-        int k = 0;
-        for (Gene gene : animal.getGenome()){
-            String sgene = "";
-            if (k++ == p) sgene+="*";
-            sgene += String.valueOf(GeneTranslator.geneToInt(gene));
-            genome += sgene + " ";
+        String sa = "";
+        if (animal != null) {
+            int p = animal.getGenome().getPointer();
+            int k = 0;
+            for (Gene gene : animal.getGenome()) {
+                String sgene = "";
+                if (k++ == p) sgene += "*";
+                sgene += String.valueOf(GeneTranslator.geneToInt(gene));
+                genome += sgene + " ";
+            }
+            int max_type = Math.max(animal.blue, Math.max(animal.green, animal.red));
+            String r = (animal.red == max_type) ? "r" : "";
+            String g = (animal.green == max_type) ? "g" : "";
+            String b = (animal.blue == max_type) ? "b" : "";
+            sa = "ID" + animal.hashCode() + ", " +
+                    "X: " + String.valueOf(animal.getCell().getX()) + " " +
+                    "Y: " + String.valueOf(animal.getCell().getY()) + ", " +
+                    "Energy: " + String.valueOf(animal.getEnergy()) + ", " +
+                    "Type: " + r + g + b + ", " + "\n" +
+                    "Genome: [" + genome + "];";
         }
-        int max_type = Math.max(animal.blue, Math.max(animal.green, animal.red));
-        String r = (animal.red == max_type)?"r":"";
-        String g = (animal.green == max_type)?"g":"";
-        String b = (animal.blue == max_type)?"b":"";
-        String sa = "ID" + animal.hashCode() + ", " +
-                "X: " + String.valueOf(animal.getCell().getX()) + " " +
-                "Y: " + String.valueOf(animal.getCell().getY()) + ", " +
-                "Energy: " + String.valueOf(animal.getEnergy()) +  ", " +
-                "Type: " + r + g + b  +  ", " +
-                "Genome: [" + genome+ "];";
 
         return sa;
     }

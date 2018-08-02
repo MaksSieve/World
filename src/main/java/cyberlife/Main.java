@@ -21,14 +21,14 @@ public class Main {
         int i = 1;
         while(true){
             if(BraveNewWorld.tick(i) != null) {
-                if (i%1==0){
-                    window.update(BraveNewWorld);
-                    Thread.sleep(100);
-                }
                 if (i%25==0){
-                    System.out.println("Tick " + String.valueOf(i));
-                    TextView.printWorld(BraveNewWorld);
+                    window.update(BraveNewWorld);
+                    Thread.sleep(1);
                 }
+//                if (i%25==0){
+//                    System.out.println("Tick " + String.valueOf(i));
+//                    TextView.printWorld(BraveNewWorld);
+//                }
 
             }else{
                 System.out.println("Tick " + String.valueOf(i));
