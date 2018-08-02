@@ -16,9 +16,12 @@ public class World {
     private int xSize;
     private int ySize;
 
+    private int currentTick = 0;
+
     private ArrayList<ArrayList<Cell>> map = new ArrayList<ArrayList<Cell>>();
     private LoopList<Animal> population = new LoopList<>();
     private Random random = new Random();
+    private int MAX_AGE = 0;
 
 
     public World(int x, int y){
@@ -41,6 +44,7 @@ public class World {
     }
 
     public World tick(int tick){
+        currentTick++;
         int n = population.size();
         int k = 0;
         for (int i = 0; i < n ; i++){
@@ -48,6 +52,7 @@ public class World {
             if (animal.getStatus() == Animal.ALIVE) {
                 animal.step();
                 k++;
+                if (animal.getAge() > MAX_AGE) MAX_AGE = animal.getAge();
             }else{
                 if (animal.dead_count < MAX_DEAD_COUNT){
                     animal.dead_count++;
@@ -167,5 +172,25 @@ public class World {
             if (animal.getStatus() == ALIVE) k++;
         }
         return k;
+    }
+
+    public int getCurrentTick(){
+        return currentTick;
+    }
+
+    public int getMaxAge(){
+        return MAX_AGE;
+    }
+
+    public double getCurrentAverageAge(){
+        int k = 0;
+        int s = 0;
+        for (Animal animal : population){
+            if (animal.getStatus() == ALIVE) {
+                k++;
+                s += animal.getAge();
+            }
+        }
+        if (k > 0) return s/k; else return 0;
     }
 }

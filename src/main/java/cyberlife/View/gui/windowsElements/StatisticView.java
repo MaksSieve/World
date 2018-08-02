@@ -16,6 +16,9 @@ public class StatisticView extends JPanel {
     private JLabel greenStat = new JLabel();
     private JLabel redStat = new JLabel();
     private JLabel blueStat = new JLabel();
+    private JLabel currentTick = new JLabel();
+    private JLabel currentAverageAge = new JLabel();
+    private JLabel currentMaxAge = new JLabel();
 
     public StatisticView(World world) {
         super();
@@ -29,6 +32,9 @@ public class StatisticView extends JPanel {
 
         this.add(aliveStat);
         this.add(oldestStat);
+        this.add(currentTick);
+        this.add(currentAverageAge);
+        this.add(currentMaxAge);
 
         update(world);
     }
@@ -36,5 +42,8 @@ public class StatisticView extends JPanel {
     public void update(World world){
         aliveStat.setText("Alive population: " + world.getAliveNumber());
         oldestStat.setText("The oldest alive: " + animalToString(world.getOldest()));
+        currentTick.setText("Current tick: " + world.getCurrentTick());
+        currentAverageAge.setText("Current Average Age: " + world.getCurrentAverageAge());
+        currentMaxAge.setText("Current Max Age: " + world.getMaxAge());
     }
 }

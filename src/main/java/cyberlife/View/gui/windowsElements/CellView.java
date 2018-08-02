@@ -3,6 +3,7 @@ package cyberlife.View.gui.windowsElements;
 import cyberlife.model.world.Cell;
 
 import javax.swing.*;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 
 public class CellView extends JLabel {
@@ -18,11 +19,13 @@ public class CellView extends JLabel {
         this.model = model;
         this.animal = new AnimalView();
         update(model);
-        this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
+        this.setBorder(new BorderUIResource.LineBorderUIResource(Color.black, 1));
+        this.setBounds(new Rectangle(10,10));
         this.add(this.animal);
-//        this.revalidate();
-//        this.repaint();
-        //setVisible(true);
+        this.revalidate();
+        this.repaint();
+        setVisible(true);
     }
 
 

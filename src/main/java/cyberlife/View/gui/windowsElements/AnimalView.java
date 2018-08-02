@@ -11,10 +11,10 @@ public class AnimalView extends JLabel{
 
 
 
-    private final ImageIcon green = new ImageIcon(CellView.class.getResource("/greenAnimal.png"));
-    private final ImageIcon red = new ImageIcon(CellView.class.getResource("/redAnimal.png"));
-    private final ImageIcon blue = new ImageIcon(CellView.class.getResource("/blueAnimal.png"));
-    private final ImageIcon dead = new ImageIcon(CellView.class.getResource("/blackAnimal.png"));
+    private final ImageIcon green = new ImageIcon(CellView.class.getResource("/greenAnimalBig.png"));
+    private final ImageIcon red = new ImageIcon(CellView.class.getResource("/redAnimalBig.png"));
+    private final ImageIcon blue = new ImageIcon(CellView.class.getResource("/blueAnimalBig.png"));
+    private final ImageIcon dead = new ImageIcon(CellView.class.getResource("/blackAnimalBig.png"));
 
     public AnimalView() {
     }

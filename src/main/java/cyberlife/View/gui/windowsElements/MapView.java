@@ -18,8 +18,8 @@ public class MapView extends JPanel {
         this.setBorder(new BorderUIResource.LineBorderUIResource(Color.black, 1));
         this.setBackground(Color.LIGHT_GRAY);
         GridLayout layout = new GridLayout(x, y);
-        layout.setHgap(2);
-        layout.setVgap(2);
+        layout.setHgap(0);
+        layout.setVgap(0);
         this.setLayout(layout);
         this.setBounds(new Rectangle(480,480));
 

@@ -21,7 +21,8 @@ public class Animal {
     private static int MAX_COLOR = 100;
     public static int MAX_DEAD_COUNT = 10;
     private int uid = ++UNIQUE_ID;
-    private int maxEnergy = 1000;
+    private static int maxEnergy = 750;
+
 
     private Random random = new Random();
     private LoopList<Gene> genome;
@@ -31,6 +32,7 @@ public class Animal {
     private World world;
     private int status;
     private ArrayList<Animal> neighbours = null;
+    private int age = 0;
 
     public int green = 0;
     public int red = 0;
@@ -91,6 +93,7 @@ public class Animal {
     }
 
     public void step(){
+        this.age++;
         this.k = 0;
         setNeighbours(updateNeighbours());
         genome.getNext().action();
@@ -100,11 +103,11 @@ public class Animal {
                 if (target.getAnimal() != null) {
                     if (target.getAnimal().getStatus() != ALIVE) {
                         reproduction(target);
-                        this.decreaseEnergy(500);
+                        this.decreaseEnergy(300);
                     }else dead();
                 }else{
                     reproduction(target);
-                    this.decreaseEnergy(500);
+                    this.decreaseEnergy(300);
                 }
             }else dead();
         }
@@ -113,11 +116,11 @@ public class Animal {
             dead();
         }
 
-        if (random.nextInt(10)==0){
-            mutation(random.nextInt(genome.size()), random.nextInt(12), this);
+        if (random.nextInt(50)==0){
+            mutation(random.nextInt(genome.size()), random.nextInt(15), this);
         }
 
-        this.decreaseEnergy(50 + red*5 + blue*3);
+        this.decreaseEnergy(50);
 
     }
 
@@ -231,5 +234,9 @@ public class Animal {
 
     public int getUid() {
         return uid;
+    }
+
+    public int getAge() {
+        return age;
     }
 }
