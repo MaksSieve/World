@@ -36,7 +36,7 @@ public class MapView extends JPanel {
 
     public void update(World world){
         for (int i = 0; i < world.getxSize(); i++){
-            for (int j = 0; j < world.getySize(); i++){
+            for (int j = 0; j < world.getySize(); j++){
                 Cell newCell = world.getMap().get(i).get(j);
                 CellView oldCell = map.get(i).get(j);
                 oldCell.update(newCell);

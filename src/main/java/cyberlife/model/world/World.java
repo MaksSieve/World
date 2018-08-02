@@ -74,7 +74,7 @@ public class World {
                     if (neib != null)
                         minerals += (int)Math.round(neib.getMinerals()*0.0005);
                 }
-                cell.increaseGrass(1 + (int)Math.round(minerals*0.0001));
+                if (random.nextInt(100)<40) cell.increaseGrass(1 + (int)Math.round(minerals*0.0001));
             }
         }
     }

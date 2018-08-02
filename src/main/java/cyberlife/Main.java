@@ -7,8 +7,8 @@ import cyberlife.model.world.World;
 public class Main {
 
     private static int TICKS = 1000000;
-    private static int world_X = 10;
-    private static int world_Y = 10;
+    private static int world_X = 75;
+    private static int world_Y = 100;
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -21,9 +21,9 @@ public class Main {
         int i = 1;
         while(true){
             if(BraveNewWorld.tick(i) != null) {
-                if (i%5==0){
+                if (i%1==0){
                     window.update(BraveNewWorld);
-                    Thread.sleep(10);
+                    Thread.sleep(100);
                 }
                 if (i%25==0){
                     System.out.println("Tick " + String.valueOf(i));

@@ -21,6 +21,7 @@ public class GUIVIew extends JFrame{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
+        this.setName("World");
 
     }
 
