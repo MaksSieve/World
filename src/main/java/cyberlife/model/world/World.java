@@ -24,9 +24,11 @@ public class World {
     private Random random = new Random();
     private int MAX_AGE = 0;
     private int month = 3;
+    private int season  = 1;
     private int R_COUNT = 0;
     private int G_COUNT = 0;
     private int B_COUNT = 0;
+    private int winterLong = 4;
 
 
     public World(int x, int y){
@@ -221,30 +223,26 @@ public class World {
 
     @Override
     public String toString() {
-        return "{"
-                + "\"X\":" + xSize + ","
-                + "\"Y\":" + ySize + ","
-                + "\"CurrentTick\": " + currentTick + ","
-                + "\"population\": " + population.toString()
-                + "}\n";
-    }
-
-    public ArrayList<Point> getInfluxBatch(){
-        ArrayList<Point> points = new ArrayList<>();
-        for (Animal animal : population){
-            points.add(animal.toInfluxPoint());
-        }
-        return points;
+        return worldToPoint().toString();
     }
 
     public int getTemperature(){
-        if (month<=2 || month >=10)return -10;
-        if (month>=4 && month <=8) return 30;
-        return 10;
+        if (season == 1 || season == 3) return 10;
+        if (season == 0) return -20;
+        return 30;
     }
 
     public void increaseMonth(){
-        month = (month +1 < 12)?month+1:0;
+        if (month + 1 > 12){
+            month = 0;
+            season = 0;
+            winterLong = random.nextInt(9);
+        }else{
+            month++;
+            if (month >= winterLong) season = 1;
+            if (month >= winterLong + 1) season = 2;
+            if (month >= 11) season = 3;
+        }
     }
 
     public double getAverageEnergy(){
