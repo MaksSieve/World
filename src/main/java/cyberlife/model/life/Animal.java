@@ -1,15 +1,19 @@
 package cyberlife.model.life;
 
+import cyberlife.View.TextView;
 import cyberlife.model.LoopList;
 import cyberlife.model.life.genes.Gene;
+import cyberlife.model.life.genes.GeneTranslator;
 import cyberlife.model.life.genes.HerbivorousGene;
 import cyberlife.model.world.Cell;
 import cyberlife.model.world.World;
+import org.influxdb.dto.Point;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static cyberlife.model.life.genes.GeneTranslator.intToGene;
 
@@ -120,7 +124,7 @@ public class Animal {
             mutation(random.nextInt(genome.size()), random.nextInt(15), this);
         }
 
-        this.decreaseEnergy(50);
+        this.decreaseEnergy(Math.round(50 / world.getTemperature()/30));
 
     }
 
@@ -213,7 +217,7 @@ public class Animal {
                 k++;
             }
         }
-        return k < 2;
+        return k < 10;
     }
 
     private ArrayList<Animal> updateNeighbours(){
@@ -238,5 +242,26 @@ public class Animal {
 
     public int getAge() {
         return age;
+    }
+
+    @Override
+    public String toString() {
+        return TextView.animalToString(this);
+    }
+
+    public Point toInfluxPoint(){
+        int max_type = Math.max(this.blue, Math.max(this.green, this.red));
+        String r = (this.red == max_type) ? "r" : "";
+        String g = (this.green == max_type) ? "g" : "";
+        String b = (this.blue == max_type) ? "b" : "";
+
+        return Point.measurement("CyberLife")
+                .time(System.currentTimeMillis()+ this.hashCode()/1000, TimeUnit.MILLISECONDS)
+                .addField("Id", String.valueOf(this.hashCode()))
+                .tag("Status", String.valueOf(this.getStatus()))
+                .addField("Age", this.getAge())
+                .addField("Energy", this.getEnergy())
+                .tag("Type", r+g+b)
+                .build();
     }
 }

@@ -55,4 +55,6 @@ public class CellView extends JLabel {
     public void setAnimal(AnimalView animal) {
         this.animal = animal;
     }
+
+
 }

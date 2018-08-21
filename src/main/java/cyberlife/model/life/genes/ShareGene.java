@@ -3,6 +3,7 @@ package cyberlife.model.life.genes;
 import cyberlife.model.life.Animal;
 
 public class ShareGene extends Gene{
+
     public ShareGene(Animal host) {
         super(host);
     }

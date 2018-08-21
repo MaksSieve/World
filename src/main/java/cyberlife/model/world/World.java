@@ -2,6 +2,7 @@ package cyberlife.model.world;
 
 import cyberlife.model.LoopList;
 import cyberlife.model.life.Animal;
+import org.influxdb.dto.Point;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -22,6 +23,10 @@ public class World {
     private LoopList<Animal> population = new LoopList<>();
     private Random random = new Random();
     private int MAX_AGE = 0;
+    private int month = 3;
+    private int R_COUNT = 0;
+    private int G_COUNT = 0;
+    private int B_COUNT = 0;
 
 
     public World(int x, int y){
@@ -47,13 +52,22 @@ public class World {
         currentTick++;
         int n = population.size();
         int k = 0;
+        int r_number = 0;
+        int g_number = 0;
+        int b_number = 0;
         for (int i = 0; i < n ; i++){
             Animal animal = population.getNext();
             if (animal.getStatus() == Animal.ALIVE) {
                 animal.step();
                 k++;
                 if (animal.getAge() > MAX_AGE) MAX_AGE = animal.getAge();
+                int max_type = Math.max(animal.blue, Math.max(animal.green, animal.red));
+                if(animal.red == max_type)r_number++;
+                if(animal.green == max_type)g_number++;
+                if(animal.blue == max_type)b_number++;
+
             }else{
+
                 if (animal.dead_count < MAX_DEAD_COUNT){
                     animal.dead_count++;
                 }else{
@@ -65,9 +79,14 @@ public class World {
                 }
             }
         }
-        if (tick%50== 0) grassGrow();
-        if (tick%100 == 0) grassUpdate();
-        if (tick%500 == 0) godHand();
+        R_COUNT = r_number;
+        G_COUNT = g_number;
+        B_COUNT = b_number;
+
+        if (tick%90 == 0){increaseMonth();}
+        if (tick%45 == 0) grassGrow();
+        if (tick%300 == 0) grassUpdate();
+        if (tick%1500 == 0) godHand();
         if (k>0) return this;
         else return null;
     }
@@ -76,13 +95,19 @@ public class World {
         for (ArrayList<Cell> row : map){
             for (Cell cell : row){
                 int minerals = 0;
-                for (Cell neib : cell.getNeibours()){
-                    if (neib != null)
-                        minerals += (int)Math.round(neib.getMinerals()*0.05);
+                if (getTemperature() < 0){
+                    cell.decreaseGrass(cell.getGrassAmount());
                 }
-                int r = random.nextInt(100);
-                if (r<10) cell.decreaseGrass(250);
-                else cell.increaseGrass(50 + (int)Math.round(minerals*0.01));
+                else {
+                    int t = getTemperature();
+                    for (Cell neib : cell.getNeibours()) {
+                        if (neib != null)
+                            minerals += (int) Math.round(neib.getMinerals() * 0.05);
+                    }
+                    int r = random.nextInt(100);
+                    if (r < 10) cell.decreaseGrass(250);
+                    else cell.increaseGrass(Math.round(25 + (int) Math.round(minerals * 0.01)*t/30));
+                }
             }
         }
     }
@@ -192,5 +217,84 @@ public class World {
             }
         }
         if (k > 0) return s/k; else return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+                + "\"X\":" + xSize + ","
+                + "\"Y\":" + ySize + ","
+                + "\"CurrentTick\": " + currentTick + ","
+                + "\"population\": " + population.toString()
+                + "}\n";
+    }
+
+    public ArrayList<Point> getInfluxBatch(){
+        ArrayList<Point> points = new ArrayList<>();
+        for (Animal animal : population){
+            points.add(animal.toInfluxPoint());
+        }
+        return points;
+    }
+
+    public int getTemperature(){
+        if (month<=2 || month >=10)return -10;
+        if (month>=4 && month <=8) return 30;
+        return 10;
+    }
+
+    public void increaseMonth(){
+        month = (month +1 < 12)?month+1:0;
+    }
+
+    public double getAverageEnergy(){
+        int k = 0;
+        int s = 0;
+        for (Animal animal: population){
+            if (animal.getStatus() == ALIVE) {
+                s += animal.getEnergy();
+                k++;
+            }
+        }
+
+        return s/k;
+    }
+
+    public int  getMaxEnergy(){
+        int max = 0;
+        for (Animal animal: population){
+            if (animal.getStatus() == ALIVE) {
+                max = (max < animal.getEnergy()) ? animal.getEnergy() : max;
+            }
+        }
+        return max;
+    }
+
+    public int  getMinEnergy(){
+        int min = 10000;
+        for (Animal animal: population){
+            if (animal.getStatus() == ALIVE) {
+                min = (min > animal.getEnergy()) ? animal.getEnergy() : min;
+            }
+        }
+        return min;
+    }
+
+    public Point worldToPoint(){
+        return Point.measurement("CyberLife")
+                .addField("alive", getAliveNumber())
+                .addField("dead", population.size()-getAliveNumber())
+                .addField("month", month)
+                .addField("oldest", getOldest().getAge())
+                .addField("maxAge", MAX_AGE)
+                .addField("currentTick", currentTick)
+                .addField("red", R_COUNT)
+                .addField("green", G_COUNT)
+                .addField("blue", B_COUNT)
+                .addField("maxEnergy", getMaxEnergy())
+                .addField("minEnergy", getMinEnergy())
+                .addField("avgEnergy", getAverageEnergy())
+                .addField("temperature", getTemperature())
+                .build();
     }
 }

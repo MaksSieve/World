@@ -85,27 +85,29 @@ public class TextView {
     }
 
     public static String animalToString(Animal animal){
-        String genome = "";
+        StringBuilder genome = new StringBuilder();
         String sa = "";
         if (animal != null) {
             int p = animal.getGenome().getPointer();
             int k = 0;
             for (Gene gene : animal.getGenome()) {
                 String sgene = "";
-                if (k++ == p) sgene += "*";
+                //if (k++ == p) sgene += "*";
                 sgene += String.valueOf(GeneTranslator.geneToInt(gene));
-                genome += sgene + " ";
+                genome.append(sgene).append(",");
             }
             int max_type = Math.max(animal.blue, Math.max(animal.green, animal.red));
             String r = (animal.red == max_type) ? "r" : "";
             String g = (animal.green == max_type) ? "g" : "";
             String b = (animal.blue == max_type) ? "b" : "";
-            sa = "ID" + animal.hashCode() + ", " +
-                    "X: " + String.valueOf(animal.getCell().getX()) + " " +
-                    "Y: " + String.valueOf(animal.getCell().getY()) + ", " +
-                    "Energy: " + String.valueOf(animal.getEnergy()) + ", " +
-                    "Type: " + r + g + b + ", " + "\n" +
-                    "Genome: [" + genome + "];";
+            sa = "{\"ID\": " + animal.hashCode() + "," +
+                    "\"X\": " + String.valueOf(animal.getCell().getX()) + "," +
+                    "\"Y\": " + String.valueOf(animal.getCell().getY()) + "," +
+                    "\"Status\": " + animal.getStatus() + " " +
+                    "\"Age\": " + String.valueOf(animal.getAge()) + "," +
+                    "\"Energy\": " + String.valueOf(animal.getEnergy()) + "," +
+                    "\"Type\": \"" + r + g + b + "\"," +
+                    "\"Genome\": [" + genome + "]}";
         }
 
         return sa;
