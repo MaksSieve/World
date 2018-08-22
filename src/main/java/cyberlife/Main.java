@@ -1,18 +1,10 @@
 package cyberlife;
 
-import cyberlife.View.MyTypeAdapter;
 import cyberlife.View.TextView;
-import cyberlife.View.gui.GUIVIew;
-import cyberlife.model.life.Animal;
-import cyberlife.model.life.genes.Gene;
-import cyberlife.model.world.Cell;
 import cyberlife.model.world.World;
 
-import com.google.gson.*;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.BatchPoints;
-import org.influxdb.dto.Point;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -24,8 +16,8 @@ import java.util.Date;
 public class Main {
 
     private static int TICKS = 100;
-    private static int world_X = 50;
-    private static int world_Y = 100;
+    private static int world_X = 1000;
+    private static int world_Y = 1000;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HHmmss.z");
     private static String dateTime = dateFormat.format(new Date(System.currentTimeMillis()));
     private static String fileName = "log_" + dateTime +".log";
@@ -57,8 +49,6 @@ public class Main {
 //                    }
                     if (i%30 == 0){
                         influxDB.write(BraveNewWorld.worldToPoint());
-                    }
-                    if (i%10==0){
                         System.out.println("Tick " + String.valueOf(i));
                         TextView.printWorld(BraveNewWorld);
                         writer.write(BraveNewWorld.toString());

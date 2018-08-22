@@ -12,14 +12,12 @@ public class CarnivorousGene extends Gene {
 
     @Override
     public void action() {
-        Cell target = host.getCell().getNeibour(host.getDirection());
+        Animal target = host.findVictim();
         if (target != null){
-            if (target.getAnimal() != null){
-                if (target.getAnimal().getStatus() == ALIVE) {
-                    target.getAnimal().decreaseEnergy(1200);
-                    host.increaseEnergy(1200);
-                    host.increaseRed(100);
-                }
+            if (target.getStatus() == ALIVE) {
+                target.decreaseEnergy(1000);
+                host.increaseEnergy(1000);
+                host.increaseRed(200);
             }
         }
     }

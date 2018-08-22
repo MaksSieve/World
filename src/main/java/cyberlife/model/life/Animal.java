@@ -25,7 +25,7 @@ public class Animal {
     private static int MAX_COLOR = 100;
     public static int MAX_DEAD_COUNT = 10;
     private int uid = ++UNIQUE_ID;
-    private static int maxEnergy = 750;
+    private static int maxEnergy = 1000;
 
 
     private Random random = new Random();
@@ -263,5 +263,13 @@ public class Animal {
                 .addField("Energy", this.getEnergy())
                 .tag("Type", r+g+b)
                 .build();
+    }
+
+    public Animal findVictim(){
+
+        for (Cell neibCell : cell.getNeibours()){
+            if (neibCell != null && neibCell.getAnimal() != null) return neibCell.getAnimal();
+        }
+        return null;
     }
 }

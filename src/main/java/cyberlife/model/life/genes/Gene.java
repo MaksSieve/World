@@ -14,7 +14,7 @@ public class Gene{
     public void action(){
         host.getGenome().increasePointer(GeneTranslator.geneToInt(this));
         try {
-            if (host.k < 32) {
+            if (host.k < 5) {
                 host.k++;
                 host.getGenome().getNext().action();
             }

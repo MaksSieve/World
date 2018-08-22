@@ -19,7 +19,7 @@ public class ScavengerGene extends Gene {
                 if (target.getAnimal().getStatus() == CORPSE && target.getAnimal().getEnergy() > 0) {
                     target.getAnimal().decreaseEnergy(500);
                     host.increaseEnergy(500+((target.getAnimal().getEnergy() > 0)?0:target.getAnimal().getEnergy()));
-                    host.increaseBlue(100);
+                    host.increaseBlue(50);
                 }
             }
         }

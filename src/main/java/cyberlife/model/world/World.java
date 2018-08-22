@@ -85,10 +85,10 @@ public class World {
         G_COUNT = g_number;
         B_COUNT = b_number;
 
-        if (tick%90 == 0){increaseMonth();}
-        if (tick%45 == 0) grassGrow();
-        if (tick%300 == 0) grassUpdate();
-        if (tick%1500 == 0) godHand();
+        if (tick%720 == 0)increaseMonth();
+        if (tick%360 == 0) grassGrow();
+        if (tick%4320 == 0) grassUpdate();
+        if (tick%4320 == 0) godHand();
         if (k>0) return this;
         else return null;
     }
@@ -137,7 +137,7 @@ public class World {
         System.out.println("HAAAAALELLUJAH!");
         for (Animal animal : population){
             if (animal.getStatus() == Animal.ALIVE) {
-                for (Integer index : randomX(8)){
+                for (Integer index : randomX(4)){
                     animal.mutation(index, random.nextInt(16), animal);
                 }
             }
@@ -227,21 +227,21 @@ public class World {
     }
 
     public int getTemperature(){
-        if (season == 1 || season == 3) return 10;
-        if (season == 0) return -20;
-        return 30;
+        if (season == 1 || season == 3) return random.nextInt(10)+11;
+        if (season == 0) return random.nextInt(10)-24;
+        return random.nextInt(10)+ 26;
     }
 
     public void increaseMonth(){
-        if (month + 1 > 12){
+        if (month + 1 > 11){
             month = 0;
             season = 0;
             winterLong = random.nextInt(9);
         }else{
             month++;
             if (month >= winterLong) season = 1;
-            if (month >= winterLong + 1) season = 2;
-            if (month >= 11) season = 3;
+            if (month >= winterLong + 2) season = 2;
+            if (month >= 10) season = 3;
         }
     }
 

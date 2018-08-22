@@ -21,7 +21,7 @@ public class CellView extends JLabel {
         update(model);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
         this.setBorder(new BorderUIResource.LineBorderUIResource(Color.black, 1));
-        this.setBounds(new Rectangle(10,10));
+        this.setBounds(new Rectangle(5,5));
         this.add(this.animal);
         this.revalidate();
         this.repaint();
