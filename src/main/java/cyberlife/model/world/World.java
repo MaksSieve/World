@@ -88,7 +88,7 @@ public class World {
         if (tick%720 == 0)increaseMonth();
         if (tick%360 == 0) grassGrow();
         if (tick%4320 == 0) grassUpdate();
-        if (tick%4320 == 0) godHand();
+        if (tick%43200 == 0) godHand();
         if (k>0) return this;
         else return null;
     }
@@ -101,7 +101,7 @@ public class World {
                     cell.decreaseGrass(cell.getGrassAmount());
                 }
                 else {
-                    int t = getTemperature();
+                    double t = getTemperature();
                     for (Cell neib : cell.getNeibours()) {
                         if (neib != null)
                             minerals += (int) Math.round(neib.getMinerals() * 0.05);
@@ -226,10 +226,8 @@ public class World {
         return worldToPoint().toString();
     }
 
-    public int getTemperature(){
-        if (season == 1 || season == 3) return random.nextInt(10)+11;
-        if (season == 0) return random.nextInt(10)-24;
-        return random.nextInt(10)+ 26;
+    public double getTemperature(){
+        return  random.nextInt(10) + 30*Math.cos(Math.PI*(0.185*month-1))- 5;
     }
 
     public void increaseMonth(){
@@ -258,8 +256,8 @@ public class World {
         return s/k;
     }
 
-    public int  getMaxEnergy(){
-        int max = 0;
+    public double  getMaxEnergy(){
+        double max = 0;
         for (Animal animal: population){
             if (animal.getStatus() == ALIVE) {
                 max = (max < animal.getEnergy()) ? animal.getEnergy() : max;
@@ -268,8 +266,8 @@ public class World {
         return max;
     }
 
-    public int  getMinEnergy(){
-        int min = 10000;
+    public double  getMinEnergy(){
+        double min = 10000;
         for (Animal animal: population){
             if (animal.getStatus() == ALIVE) {
                 min = (min > animal.getEnergy()) ? animal.getEnergy() : min;

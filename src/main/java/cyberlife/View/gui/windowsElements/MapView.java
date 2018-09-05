@@ -15,7 +15,7 @@ public class MapView extends JPanel {
     public MapView(int x, int y, World world) {
 
         super();
-        this.setBorder(new BorderUIResource.LineBorderUIResource(Color.black, 1));
+        //this.setBorder(new BorderUIResource.LineBorderUIResource(Color.black, 1));
         this.setBackground(Color.LIGHT_GRAY);
         GridLayout layout = new GridLayout(x, y);
         layout.setHgap(0);

@@ -30,7 +30,7 @@ public class Animal {
 
     private Random random = new Random();
     private LoopList<Gene> genome;
-    private int energy;
+    private double energy;
     private int direction;
     private Cell cell;
     private World world;
@@ -120,11 +120,11 @@ public class Animal {
             dead();
         }
 
-        if (random.nextInt(50)==0){
+        if (random.nextInt(100)==0){
             mutation(random.nextInt(genome.size()), random.nextInt(15), this);
         }
 
-        this.decreaseEnergy(Math.round(50 / world.getTemperature()/30));
+        this.decreaseEnergy(Math.round(-5 * world.getTemperature()/2500));
 
     }
 
@@ -137,11 +137,11 @@ public class Animal {
         //world.kickFromPopulation(this);
     }
 
-    public void increaseEnergy(int diff){
+    public void increaseEnergy(double diff){
         if (energy+diff<=maxEnergy) energy += diff; else energy = maxEnergy;
     }
 
-    public void decreaseEnergy(int diff){
+    public void decreaseEnergy(double diff){
         if (energy-diff>=0) energy -= diff; else energy = 0;
     }
 
@@ -187,7 +187,7 @@ public class Animal {
         return status;
     }
 
-    public int getEnergy() {
+    public double getEnergy() {
         return energy;
     }
 

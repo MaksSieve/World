@@ -1,6 +1,7 @@
 package cyberlife;
 
 import cyberlife.View.TextView;
+import cyberlife.View.gui.GUIVIew;
 import cyberlife.model.world.World;
 
 import org.influxdb.InfluxDB;
@@ -16,8 +17,8 @@ import java.util.Date;
 public class Main {
 
     private static int TICKS = 100;
-    private static int world_X = 1000;
-    private static int world_Y = 1000;
+    private static int world_X = 50;
+    private static int world_Y = 50;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HHmmss.z");
     private static String dateTime = dateFormat.format(new Date(System.currentTimeMillis()));
     private static String fileName = "log_" + dateTime +".log";
@@ -28,12 +29,12 @@ public class Main {
         World BraveNewWorld = new World(world_X, world_Y);
         System.out.println("Tick 0");
         TextView.printWorld(BraveNewWorld);
-        //GUIVIew window = new GUIVIew(world_X, world_Y, BraveNewWorld);
+        GUIVIew window = new GUIVIew(world_X, world_Y, BraveNewWorld);
 
-        InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "root", "root");
-        String dbName = "CyberLife";
-        influxDB.setDatabase(dbName);
-        influxDB.enableGzip();
+//        InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "root", "root");
+//        String dbName = "CyberLife";
+//        influxDB.setDatabase(dbName);
+//        influxDB.enableGzip();
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
         writer.write(BraveNewWorld.toString());
@@ -41,17 +42,18 @@ public class Main {
         try {
             int i = 1;
             while (true) {
-                if (BraveNewWorld.tick(i) != null) {
-//                    if (i % 10 == 0) {
-//                        window.update(BraveNewWorld);
-//                        Thread.sleep(1);
-//                        writer.write(BraveNewWorld.toString());
-//                    }
-                    if (i%30 == 0){
-                        influxDB.write(BraveNewWorld.worldToPoint());
+                World ptr = BraveNewWorld.tick(i);
+                if (ptr != null) {
+                    if (i % 10 == 0) {
+                        window.update(BraveNewWorld);
+                        Thread.sleep(1);
+
+                    }
+                    if (i%24 == 0){
+                        //influxDB.write(ptr.worldToPoint());
                         System.out.println("Tick " + String.valueOf(i));
-                        TextView.printWorld(BraveNewWorld);
-                        writer.write(BraveNewWorld.toString());
+//                        TextView.printWorld(ptr);
+                        writer.write(ptr.toString()+"\n");
                     }
 
                 } else {

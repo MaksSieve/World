@@ -9,8 +9,8 @@ public class Cell {
 
 
     private int MAX_GRASS = 250;
-    private int grass;
-    private int minerals;
+    private double grass;
+    private double minerals;
     private Animal animal = null;
 
     private int x;
@@ -58,10 +58,10 @@ public class Cell {
         this.animal = animal;
     }
 
-    public void increaseGrass(int n) {
+    public void increaseGrass(double n) {
         if (this.grass+n<MAX_GRASS) {this.grass+= n;} else this.grass = MAX_GRASS;
     }
-    public void decreaseGrass(int n) {
+    public void decreaseGrass(double n) {
         if (this.grass-n>0) {this.grass-= n;} else this.grass = 0;
     }
 
@@ -69,11 +69,11 @@ public class Cell {
         if (this.grass>0) {this.grass--;}
     }
 
-    public void increaseMinerals(int n) {
+    public void increaseMinerals(double n) {
         {this.minerals += n;}
     }
 
-    public int getGrassAmount() {
+    public double getGrassAmount() {
         return grass;
     }
 
@@ -96,7 +96,7 @@ public class Cell {
         }
     }
 
-    public int getMinerals() {
+    public double getMinerals() {
         return minerals;
     }
 
