@@ -15,7 +15,7 @@ public class GeneTranslator {
         if (gene instanceof CarnivorousGene) return 3;
         if (gene instanceof MovementGene) return 4;
         if (gene instanceof TurnGene) return 5;
-        return random.nextInt(10)+6;
+        return gene.getN();
     }
 
     public static Gene intToGene(int code, Animal host){

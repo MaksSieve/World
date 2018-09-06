@@ -56,10 +56,9 @@ public class Animal {
         this.status = ALIVE;
     }
 
-    public Animal(LoopList<Gene> genome, int energy, int maxEnergy, int direction, Cell cell, World world, int status) {
+    public Animal(LoopList<Gene> genome, int energy, int direction, Cell cell, World world, int status) {
         this.genome = genome;
         this.energy = energy;
-        this.maxEnergy = maxEnergy;
         this.direction = direction;
         this.cell = cell;
         this.world = world;
@@ -120,9 +119,11 @@ public class Animal {
             dead();
         }
 
-        if (random.nextInt(100)==0){
+        if (random.nextInt(50)==0){
             mutation(random.nextInt(genome.size()), random.nextInt(15), this);
         }
+
+        shareEnergy();
 
         this.decreaseEnergy(Math.round(-5 * world.getTemperature()/2500));
 
@@ -242,6 +243,15 @@ public class Animal {
 
     public int getAge() {
         return age;
+    }
+
+    private void shareEnergy(){
+        int energyForShare = (int)Math.round(this.getEnergy()*0.32);
+        this.decreaseEnergy(energyForShare);
+        int neighbNumber = this.getNeighbours().size();
+        for (Animal animal : this.getNeighbours()){
+            animal.increaseEnergy(Math.round(energyForShare/neighbNumber));
+        }
     }
 
     @Override

@@ -5,8 +5,6 @@ import cyberlife.model.life.genes.Gene;
 import cyberlife.model.life.genes.GeneTranslator;
 import cyberlife.model.world.World;
 
-import java.util.ArrayList;
-
 public class TextView {
 
     public static void printWorld(World world){
@@ -30,7 +28,7 @@ public class TextView {
         }
 
         String stat1 = "Alive Population: " + alive + "\n" +
-                "The oldest alive animal: " + ((world.getOldest() != null)?animalToString(world.getOldest()):"") + "\n" +
+                "The oldest alive animal: " + ((world.getEverOldest() != null)?animalToString(world.getEverOldest()):"") + "\n" +
                 "Number of green: " + g_number + " " + "Number of red: " + r_number +  " " + "Number of blue: " + b_number;
 
         System.out.println(stat1);
@@ -47,7 +45,7 @@ public class TextView {
 
         }
         String stat2 = "Alive Population: " + alive + "\n" +
-            "The oldest alive animal: " + ((world.getOldest() != null)?animalToString(world.getOldest()):"") + "\n" +
+            "The oldest alive animal: " + ((world.getEverOldest() != null)?animalToString(world.getEverOldest()):"") + "\n" +
             "Number of green: " + g_number + " " + "Number of red: " + r_number +  " " + "Number of blue: " + b_number;
 
         System.out.println(stat2);

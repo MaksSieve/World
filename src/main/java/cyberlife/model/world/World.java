@@ -30,6 +30,13 @@ public class World {
     private int B_COUNT = 0;
     private int winterLong = 4;
 
+    private Animal everOldest = null;
+    private int alive = 0;
+    private double avgAge = 0;
+    private double maxEnergy = 0;
+    private double minEnergy = Integer.MAX_VALUE;
+
+
 
     public World(int x, int y){
         setxSize(x);
@@ -52,26 +59,35 @@ public class World {
 
     public World tick(int tick){
         currentTick++;
-        int n = population.size();
-        int k = 0;
+        alive = 0;
         int r_number = 0;
         int g_number = 0;
         int b_number = 0;
-        for (int i = 0; i < n ; i++){
+        int s = 0;
+        int theOldestId = Integer.MAX_VALUE;
+        for (int i = 0; i < population.size() ; i++){
             Animal animal = population.getNext();
             if (animal.getStatus() == Animal.ALIVE) {
                 animal.step();
-                k++;
+                alive++;
                 if (animal.getAge() > MAX_AGE) MAX_AGE = animal.getAge();
                 int max_type = Math.max(animal.blue, Math.max(animal.green, animal.red));
                 if(animal.red == max_type)r_number++;
                 if(animal.green == max_type)g_number++;
                 if(animal.blue == max_type)b_number++;
+                if (animal.hashCode() < theOldestId) {
+                    theOldestId = animal.hashCode();
+                    everOldest = animal;
+                }
+                maxEnergy = (maxEnergy < animal.getEnergy()) ? animal.getEnergy() : maxEnergy;
+                minEnergy = (minEnergy > animal.getEnergy()) ? animal.getEnergy() : minEnergy;
+                s += animal.getAge();
 
             }else{
 
                 if (animal.dead_count < MAX_DEAD_COUNT){
                     animal.dead_count++;
+                    alive--;
                 }else{
                     population.remove(animal);
                     population.decreasePointer();
@@ -81,6 +97,10 @@ public class World {
                 }
             }
         }
+
+
+        avgAge = (alive>0)?(s/alive):0;
+
         R_COUNT = r_number;
         G_COUNT = g_number;
         B_COUNT = b_number;
@@ -88,8 +108,8 @@ public class World {
         if (tick%720 == 0)increaseMonth();
         if (tick%360 == 0) grassGrow();
         if (tick%4320 == 0) grassUpdate();
-        if (tick%43200 == 0) godHand();
-        if (k>0) return this;
+        if (tick%87600 == 0) godHand();
+        if (alive>0) return this;
         else return null;
     }
 
@@ -179,26 +199,12 @@ public class World {
         return population;
     }
 
-    public Animal getOldest(){
-        Animal oldest = null;
-        int theOldestId = Integer.MAX_VALUE;
-        for (Animal animal : population){
-            if (animal.getStatus() == ALIVE) {
-                if (animal.hashCode() < theOldestId) {
-                    theOldestId = animal.hashCode();
-                    oldest = animal;
-                }
-            }
-        }
-        return oldest;
+    public Animal getEverOldest(){
+        return everOldest;
     }
 
     public int getAliveNumber(){
-        int k = 0;
-        for (Animal animal : population){
-            if (animal.getStatus() == ALIVE) k++;
-        }
-        return k;
+        return alive;
     }
 
     public int getCurrentTick(){
@@ -210,15 +216,7 @@ public class World {
     }
 
     public double getCurrentAverageAge(){
-        int k = 0;
-        int s = 0;
-        for (Animal animal : population){
-            if (animal.getStatus() == ALIVE) {
-                k++;
-                s += animal.getAge();
-            }
-        }
-        if (k > 0) return s/k; else return 0;
+        return avgAge;
     }
 
     @Override
@@ -257,23 +255,11 @@ public class World {
     }
 
     public double  getMaxEnergy(){
-        double max = 0;
-        for (Animal animal: population){
-            if (animal.getStatus() == ALIVE) {
-                max = (max < animal.getEnergy()) ? animal.getEnergy() : max;
-            }
-        }
-        return max;
+        return maxEnergy;
     }
 
     public double  getMinEnergy(){
-        double min = 10000;
-        for (Animal animal: population){
-            if (animal.getStatus() == ALIVE) {
-                min = (min > animal.getEnergy()) ? animal.getEnergy() : min;
-            }
-        }
-        return min;
+        return minEnergy;
     }
 
     public Point worldToPoint(){
@@ -281,7 +267,7 @@ public class World {
                 .addField("alive", getAliveNumber())
                 .addField("dead", population.size()-getAliveNumber())
                 .addField("month", month)
-                .addField("oldest", getOldest().getAge())
+                .addField("oldest", getEverOldest().getAge())
                 .addField("maxAge", MAX_AGE)
                 .addField("currentTick", currentTick)
                 .addField("red", R_COUNT)

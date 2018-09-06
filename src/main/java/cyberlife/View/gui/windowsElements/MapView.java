@@ -21,7 +21,7 @@ public class MapView extends JPanel {
         layout.setHgap(0);
         layout.setVgap(0);
         this.setLayout(layout);
-        this.setBounds(new Rectangle(480,480));
+        //this.setBounds(new Rectangle(480,480));
 
         for (ArrayList<Cell> row : world.getMap()){
             ArrayList<CellView> ROW = new ArrayList<>();

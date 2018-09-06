@@ -41,7 +41,7 @@ public class StatisticView extends JPanel {
 
     public void update(World world){
         aliveStat.setText("Alive population: " + world.getAliveNumber());
-        oldestStat.setText("The oldest alive: " + animalToString(world.getOldest()));
+        oldestStat.setText("The oldest alive: " + animalToString(world.getEverOldest()));
         currentTick.setText("Current tick: " + world.getCurrentTick());
         currentAverageAge.setText("Current Average Age: " + world.getCurrentAverageAge());
         currentMaxAge.setText("Current Max Age: " + world.getMaxAge());

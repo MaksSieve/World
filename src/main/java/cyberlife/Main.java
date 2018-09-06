@@ -17,8 +17,8 @@ import java.util.Date;
 public class Main {
 
     private static int TICKS = 100;
-    private static int world_X = 50;
-    private static int world_Y = 50;
+    private static int world_X = 100;
+    private static int world_Y = 150;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HHmmss.z");
     private static String dateTime = dateFormat.format(new Date(System.currentTimeMillis()));
     private static String fileName = "log_" + dateTime +".log";
@@ -36,15 +36,15 @@ public class Main {
 //        influxDB.setDatabase(dbName);
 //        influxDB.enableGzip();
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-        writer.write(BraveNewWorld.toString());
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+//        writer.write(BraveNewWorld.toString());
 
         try {
             int i = 1;
             while (true) {
                 World ptr = BraveNewWorld.tick(i);
                 if (ptr != null) {
-                    if (i % 10 == 0) {
+                    if (i % 1 == 0) {
                         window.update(BraveNewWorld);
                         Thread.sleep(1);
 
@@ -53,7 +53,7 @@ public class Main {
                         //influxDB.write(ptr.worldToPoint());
                         System.out.println("Tick " + String.valueOf(i));
 //                        TextView.printWorld(ptr);
-                        writer.write(ptr.toString()+"\n");
+                        //writer.write(ptr.toString()+"\n");
                     }
 
                 } else {
@@ -66,7 +66,7 @@ public class Main {
                 i++;
             }
         }finally {
-            writer.close();
+            //writer.close();
         }
 
 
